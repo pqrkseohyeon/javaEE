@@ -21,8 +21,33 @@ public class MemberDAOImpl implements MemberDAO {
 		Context initCtx = new InitialContext();
 		Context envCtx = (Context) initCtx.lookup("java:comp/env");
 		DataSource ds = (DataSource) envCtx.lookup("jdbc/member");
-		return ds.getConnection();
+		return ds.getConnection();	
+	}
+	//로그인체크
+	public int loginCheck(String userid, String pwd) {
+		Connection con = null;
+		Statement st = null;
+		ResultSet rs = null;
+		int flag=-1;//회원아님
 		
+		try {
+			con=getConnection();
+			String sql="select pwd,admin from member where userid='"+userid+"'";
+			st=con.createStatement();
+			rs=st.executeQuery(sql);
+			if(rs.next()) {//id는 맞음
+				if(rs.getString("pwd").equals(pwd)) {//비번맞음
+					flag=rs.getInt("admin");
+				}else {//비번틀림
+					flag=2;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeConnection(con, st,rs);
+		}
+		return flag;
 	}
 
 	@Override
@@ -81,22 +106,77 @@ public class MemberDAOImpl implements MemberDAO {
 		return arr;
 	}
 
+	//수정
 	@Override
-	public void memberUpdate(MemberVO vo) {
-		// TODO Auto-generated method stub
+	public int memberUpdate(MemberVO vo) {
+		Connection con = null;
+		PreparedStatement ps = null;
+		int flag=0;
 		
+		try {
+			con=getConnection();
+			String sql = "update member set name=?,email=?,phone=?,admin=? where userid=?";
+			ps = con.prepareStatement(sql);
+			ps.setString(1, vo.getName());
+			ps.setString(2, vo.getEmail());
+			ps.setString(3, vo.getPhone());
+			ps.setInt(4, vo.getAdmin());
+			ps.setString(5, vo.getUserid());
+			flag=ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeConnection(con, ps);
+		} 
+		return flag;
 	}
 
 	@Override
 	public MemberVO memberView(String userid) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection con = null;
+		Statement st = null;
+		ResultSet rs = null;
+		MemberVO member = null;
+		
+		try {
+			con=getConnection();
+			String sql="select*from member where userid='"+userid+"'";
+			st=con.createStatement();
+			rs=st.executeQuery(sql);
+			if(rs.next()) {
+				member = new MemberVO();
+				member.setAdmin(rs.getInt("admin"));
+				member.setEmail(rs.getString("email"));
+				member.setName(rs.getString("name"));
+				member.setPhone(rs.getString("phone"));
+				member.setPwd(rs.getString("pwd"));
+				member.setUserid(rs.getString("userid"));
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeConnection(con, st, rs);
+		}
+		return member;
 	}
-
+	
+	//삭제
 	@Override
 	public void memberDel(String userid) {
-		// TODO Auto-generated method stub
+		Connection con = null;
+		Statement st = null;
 		
+		try {
+			con = getConnection();
+			String sql = "delete from member where userid ='"+userid+"'";
+			st = con.createStatement();
+			st.executeUpdate(sql);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeConnection(con, st, null);
+		}
 	}
 
 	@Override
@@ -122,7 +202,7 @@ public class MemberDAOImpl implements MemberDAO {
 		}
 		return flag;
 	}
-	
+
 	
 	private void closeConnection(Connection con, PreparedStatement ps) {
 		

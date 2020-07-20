@@ -71,7 +71,32 @@ $(document).ready(function(){
 			}
 		});
 	})//idCheckBtn
-	
-	
-
 })//document
+
+//삭제
+function del(userid,mode){
+	if(mode=="관리자"){
+		alert("관리자는 삭제할 수 없습니다.");
+		return;
+	}
+	$.getJSON("memberDelete.jsp",
+			{"userid":userid},
+			function(data){
+				var htmlStr="";
+				$.each(data,function(key,val){
+					htmlStr+="<tr>";
+					htmlStr+="<td>"+val.name+"</td>";
+					htmlStr+="<td>"+val.userid+"</td>";
+					htmlStr+="<td>"+val.phone+"</td>";
+					htmlStr+="<td>"+val.email+"</td>";
+					htmlStr+="<td>"+val.mode+"</td>";
+					htmlStr+="<td><a href=javascript:del('"+val.userid+"','"+val.mode+"')>삭제2</a></td>";
+					htmlStr+="</tr>";
+				})
+			$("table tbody").html(htmlStr);
+			}//콜백함수
+	);//getJSON
+	
+}//del()함수
+
+

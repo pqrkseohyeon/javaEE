@@ -8,7 +8,7 @@ public interface MemberDAO {
 	//전체보기
 	public ArrayList<MemberVO> memberList();
 	//수정//수정할내용 매개변수
-	public void memberUpdate(MemberVO vo);
+	public int memberUpdate(MemberVO vo);
 	//상세보기//리턴값 
 	public MemberVO memberView(String userid);
 	//삭제
