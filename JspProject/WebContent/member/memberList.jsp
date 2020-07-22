@@ -26,12 +26,14 @@
 	MemberDAOImpl dao = MemberDAOImpl.getInstance();
 	ArrayList<MemberVO>arr=dao.memberList();
 	String suserid = (String)session.getAttribute("userid");//기본형이 object이라서 String으로 캐스팅 해줘야한다.
+	int count = dao.memberCount();
 %>
 </head>
 <body>
 <div align="right">
 	<a href="memberView.jsp"><%=suserid%></a>관리자님 반갑습니다.
-	<a href="logout.jsp">로그아웃</a>
+	<a href="logout.jsp">로그아웃</a><br>
+		전체 회원 수 :<span id="cntSpan"><%=count %></span>
 </div>
 <br><br>
 <table class="table">

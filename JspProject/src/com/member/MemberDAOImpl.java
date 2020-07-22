@@ -23,6 +23,30 @@ public class MemberDAOImpl implements MemberDAO {
 		DataSource ds = (DataSource) envCtx.lookup("jdbc/member");
 		return ds.getConnection();	
 	}
+	
+	//전체 회원 수 
+	public int memberCount() {
+		Connection con = null;
+		Statement st = null;
+		ResultSet rs = null;
+		int count=0;
+		
+		try {
+			con=getConnection();
+			st=con.createStatement();
+			String sql="select count(*) from member ";
+			rs=st.executeQuery(sql);
+			if(rs.next()) {
+				count=rs.getInt(1);
+			}		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeConnection(con, st,rs);
+		}
+		return count;
+	}
+	
 	//로그인체크
 	public int loginCheck(String userid, String pwd) {
 		Connection con = null;
@@ -49,7 +73,8 @@ public class MemberDAOImpl implements MemberDAO {
 		}
 		return flag;
 	}
-
+	
+	//등록
 	@Override
 	public void memberInsert(MemberVO vo) {
 		Connection con = null;
@@ -178,7 +203,8 @@ public class MemberDAOImpl implements MemberDAO {
 			closeConnection(con, st, null);
 		}
 	}
-
+	
+	//아이디 중복 체크
 	@Override
 	public String idCheck(String userid) {
 		Connection con = null;

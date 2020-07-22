@@ -83,7 +83,7 @@ function del(userid,mode){
 			{"userid":userid},
 			function(data){
 				var htmlStr="";
-				$.each(data,function(key,val){
+				$.each(data.jarr,function(key,val){
 					htmlStr+="<tr>";
 					htmlStr+="<td>"+val.name+"</td>";
 					htmlStr+="<td>"+val.userid+"</td>";
@@ -94,6 +94,7 @@ function del(userid,mode){
 					htmlStr+="</tr>";
 				})
 			$("table tbody").html(htmlStr);
+				$("#cntSpan").text(data.cntObj.count);
 			}//콜백함수
 	);//getJSON
 	
