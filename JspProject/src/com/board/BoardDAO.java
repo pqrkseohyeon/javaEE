@@ -27,21 +27,56 @@ public class BoardDAO {
 	}
 	
 	//추가
-	public void boardInsert(BoardVO board) {
+	public void boardInsert(BoardVO board) {//새글 답글 구분
 		Connection con = null;
 		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		//부모글
+		int num = board.getNum();
+		int ref = board.getRef();
+		int re_step = board.getRe_step();
+		int re_level = board.getRe_level();
+		
+		int number = 0;
+		String sql="";
 		
 		try {
 			con = getConnection();
-			//writer.email, content, passwd, num, subject
-			String sql = "insert into board(num,writer,subject,email,content,passwd,ip) values(board_seq.nextval,?,?,?,?,?,?)";
+			ps = con.prepareStatement("select max(num) from board");
+			rs = ps.executeQuery();
+			if(rs.next()) {//기존 데이터가 있을 때 ref를 최대값 +1로 결정
+				number=rs.getInt(1)+1;
+			}else { //기존 데이터가 없을 때 ref를 1로 결정
+				number=1;
+			}
+			if(num!=0) {//답글
+				sql="update board set re_step = re_step+1"
+					+" where ref = ? and re_step>?";
+				ps=con.prepareStatement(sql);
+				ps.setInt(1, ref);
+				ps.setInt(2, re_step);
+				ps.executeUpdate();
+				re_step = re_step+1;
+				re_step = re_level+1;
+				
+			}else {//새글
+				ref=number;
+				re_step=0;
+				re_level=0;
+			}
+			//num,writer,subject,email, content,ip,readcount,ref,re_step,re_level passwd
+		 sql = "insert into board(num,writer,subject,email, content,ip,readcount,ref,re_step,re_level, passwd) values(board_seq.nextval,?,?,?,?,?,0,?,?,?,?)";
 			ps=con.prepareStatement(sql);
 			ps.setString(1, board.getWriter());
 			ps.setString(2, board.getSubject());
 			ps.setString(3, board.getEmail());
 			ps.setString(4, board.getContent());
-			ps.setString(5, board.getPasswd());
-			ps.setString(6, board.getIp());
+			ps.setString(5, board.getIp());
+			ps.setInt(6, ref);
+			ps.setInt(7, re_step);
+			ps.setInt(8, re_level);
+			ps.setString(9, board.getPasswd());
 			ps.executeUpdate();			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -61,8 +96,9 @@ public class BoardDAO {
 		
 		try {
 			con=getConnection();
-			String sql = "select*from board where num="+num;
 			st=con.createStatement();
+			st.executeUpdate("update board set readcount=readcount+1 where num="+num);
+			String sql = "select*from board where num="+num;
 			rs=st.executeQuery(sql);
 			if(rs.next()) {
 				board = new BoardVO();
@@ -80,7 +116,6 @@ public class BoardDAO {
 				board.setWriter(rs.getString("writer"));
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
 			closeConnection(con, st,rs);
@@ -88,18 +123,23 @@ public class BoardDAO {
 		return board;
 	}
 	//전체보기-검색아님
-	public ArrayList<BoardVO>boarList(){
+	public ArrayList<BoardVO>boarList(int startRow,int endRow){
 		Connection con = null;
-		Statement st = null;
+		PreparedStatement ps = null;
 		ResultSet rs = null;
 		
 		ArrayList<BoardVO>arr = new ArrayList<>();
 		
 		try {
 			con=getConnection();
-			String sql = "select*from board";
-			st=con.createStatement();
-			rs=st.executeQuery(sql);
+			String sql = "select*from ("
+					+ "select rownum rn, aa.*from("
+					+ "select*from board order by ref desc,re_step asc)aa"
+					+ ") where rn <=? and rn>=?";
+			ps=con.prepareStatement(sql);
+			ps.setInt(1, endRow);
+			ps.setInt(2, startRow);
+			rs=ps.executeQuery();
 			while(rs.next()) {
 				BoardVO board = new BoardVO();
 				board.setNum(rs.getInt("num"));
@@ -114,23 +154,30 @@ public class BoardDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {
-			closeConnection(con, st,rs);
+			closeConnection(con, ps,rs);
 		}
 		return arr;
 	}
 	//전체보기-검색포함
-		public ArrayList<BoardVO>boarList(String field, String word){
+		public ArrayList<BoardVO>boarList(String field, String word,int startRow, int endRow){
 			Connection con = null;
-			Statement st = null;
+			PreparedStatement ps = null;
 			ResultSet rs = null;
 			
 			ArrayList<BoardVO>arr = new ArrayList<>();
 			
 			try {
 				con=getConnection();
-				String sql = "select*from board where "+  field+" like'%"+word+"%'";
-				st=con.createStatement();
-				rs=st.executeQuery(sql);
+				String sql = "select*from ("
+						+ "select rownum rn, aa.*from("
+						+ "select*from board where "
+						+   field+" like '%"+word+"%' order by ref desc, re_step asc)aa"
+						+ ") where rn <=? and rn>=?";
+
+				ps=con.prepareStatement(sql);
+				ps.setInt(1, endRow);
+				ps.setInt(2, startRow);
+				rs=ps.executeQuery();
 				while(rs.next()) {
 					BoardVO board = new BoardVO();
 					board.setNum(rs.getInt("num"));
@@ -145,7 +192,7 @@ public class BoardDAO {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}finally {
-				closeConnection(con, st,rs);
+				closeConnection(con, ps,rs);
 			}
 			return arr;
 		}
@@ -247,6 +294,63 @@ public class BoardDAO {
 			}
 			return count;
 		}
+		
+		//comment
+		
+		//commentInsert
+		public void commentInsert(CommentVO cvo) {
+			Connection con = null;
+			PreparedStatement ps = null;
+			
+			try {
+				con=getConnection();
+				String sql="insert into commentboard(cnum,userid,regdate,msg,bnum)"
+						+ "values(comment_seq.nextval,?,sysdate,?,?) ";
+				ps=con.prepareStatement(sql);
+				ps.setString(1, cvo.getUserid());
+				ps.setString(2, cvo.getMsg());
+				ps.setInt(3, cvo.getBnum());
+				ps.executeUpdate();		
+			} catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				closeConnection(con, ps);
+			}
+			
+		}
+		
+		//commentList
+		public ArrayList<CommentVO> commentList(int num) {
+			Connection con = null;
+			Statement st = null;
+			ResultSet rs = null;
+			ArrayList<CommentVO> arr = new ArrayList<>();
+			
+			try {
+				con=getConnection();
+				String sql="SELECT*FROM commentboard where bnum = "+num+" ORDER BY cnum DESC";
+				st=con.createStatement();
+				rs=st.executeQuery(sql);
+				while(rs.next()) {
+					CommentVO cb = new CommentVO();
+					cb.setCnum(rs.getInt("cnum"));
+					cb.setBnum(rs.getInt("bnum"));
+					cb.setUserid(rs.getString("userid"));
+					cb.setMsg(rs.getString("msg"));
+					cb.setRegdate(rs.getString("regdate"));
+					arr.add(cb);
+					
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				closeConnection(con, st,rs);
+			}
+			return arr;
+			
+			
+		}
+		
 	
 	//닫기
 	private void closeConnection(Connection con, PreparedStatement ps) {
