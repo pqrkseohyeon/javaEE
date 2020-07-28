@@ -1,7 +1,6 @@
 package com.address.action;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,16 +13,16 @@ import com.address.model.SAddressDAO;
 import com.address.model.SAddressDTO;
 
 /**
- * Servlet implementation class ListAction
+ * Servlet implementation class DetailAction
  */
-@WebServlet("/address/list.do")
-public class ListAction extends HttpServlet {
+@WebServlet("/address/detail.do")
+public class DetailAction extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ListAction() {
+    public DetailAction() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,14 +32,13 @@ public class ListAction extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
+		int num = Integer.parseInt(request.getParameter("num"));
 		SAddressDAO dao = SAddressDAO.getInstance();
-		int count = dao.addressCount();
-		ArrayList<SAddressDTO>arr =  dao.addressList();
-		request.setAttribute("listArr", arr);
-		request.setAttribute("count", count);
-		
-		RequestDispatcher rd = request.getRequestDispatcher("list.jsp");
+		SAddressDTO dto = dao.addressDetail(num);
+		request.setAttribute("dto",dto );
+		RequestDispatcher rd = request.getRequestDispatcher("detail.jsp");
 		rd.forward(request, response);
+	
 	}
 
 	/**

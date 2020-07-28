@@ -1,9 +1,6 @@
 package com.address.action;
 
 import java.io.IOException;
-import java.util.ArrayList;
-
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,16 +11,16 @@ import com.address.model.SAddressDAO;
 import com.address.model.SAddressDTO;
 
 /**
- * Servlet implementation class ListAction
+ * Servlet implementation class UpdateAction
  */
-@WebServlet("/address/list.do")
-public class ListAction extends HttpServlet {
+@WebServlet("/address/update.do")
+public class UpdateAction extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ListAction() {
+    public UpdateAction() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,14 +30,16 @@ public class ListAction extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
-		SAddressDAO dao = SAddressDAO.getInstance();
-		int count = dao.addressCount();
-		ArrayList<SAddressDTO>arr =  dao.addressList();
-		request.setAttribute("listArr", arr);
-		request.setAttribute("count", count);
+		SAddressDTO dto = new SAddressDTO();
+		dto.setNum(Integer.parseInt(request.getParameter("num")));
+		dto.setAddr(request.getParameter("addr"));
+		dto.setName(request.getParameter("name"));
+		dto.setTel(request.getParameter("tel"));
+		dto.setZipcode(request.getParameter("zipcode"));
 		
-		RequestDispatcher rd = request.getRequestDispatcher("list.jsp");
-		rd.forward(request, response);
+		SAddressDAO dao = SAddressDAO.getInstance();
+		dao.addressUpdate(dto);
+		response.sendRedirect("list.do");
 	}
 
 	/**

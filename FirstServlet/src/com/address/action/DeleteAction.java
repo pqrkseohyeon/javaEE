@@ -1,7 +1,6 @@
 package com.address.action;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -14,16 +13,16 @@ import com.address.model.SAddressDAO;
 import com.address.model.SAddressDTO;
 
 /**
- * Servlet implementation class ListAction
+ * Servlet implementation class DeleteAction
  */
-@WebServlet("/address/list.do")
-public class ListAction extends HttpServlet {
+@WebServlet("/address/delete.do")
+public class DeleteAction extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ListAction() {
+    public DeleteAction() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,14 +32,11 @@ public class ListAction extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
+		int num = Integer.parseInt(request.getParameter("num"));
 		SAddressDAO dao = SAddressDAO.getInstance();
-		int count = dao.addressCount();
-		ArrayList<SAddressDTO>arr =  dao.addressList();
-		request.setAttribute("listArr", arr);
-		request.setAttribute("count", count);
-		
-		RequestDispatcher rd = request.getRequestDispatcher("list.jsp");
-		rd.forward(request, response);
+		dao.addressDelete(num);
+		response.sendRedirect("list.do");
+
 	}
 
 	/**
