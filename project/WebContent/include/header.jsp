@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -23,14 +24,37 @@
   
   <!-- Links -->
   <ul class="navbar-nav">
-    <li class="nav-item">
-      <a class="nav-link" href="/project/member/login.me">로그인</a>
-    </li>
-    <li class="nav-item">
+  <c:choose>
+  	<c:when test="${empty sessionScope.userid}">
+  	   <li class="nav-item">
+       <a class="nav-link" href="/project/member/login.me">로그인</a>
+   	   </li>
+   	     <li class="nav-item">
       <a class="nav-link" href="/project/member/insert.me">회원가입</a>
     </li>
+  	</c:when>
+  <c:otherwise>
+  	 <li class="nav-item">
+     <a class="nav-link" href="/project/member/logout.me">로그아웃</a>
+   	 </li>
+   	   <li class="nav-item">
+      <a class="nav-link" href="/project/member/view.me">회원변경</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/project/member/delete.me">회원탈퇴</a>
+    </li>
+  </c:otherwise>
+  </c:choose>
+ 
+  
     <li class="nav-item">
       <a class="nav-link" href="/project/board/board.me">게시판</a>
     </li>
   </ul>
+  
+  <c:if test="${not empty sessionScope.userid}">
+  	<span class="navbar-text">
+  	(<a href="view.jsp">${sessionScope.userid}</a> 님 반갑습니다.)
+  	</span>
+  </c:if>
 </nav>
