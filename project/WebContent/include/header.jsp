@@ -6,6 +6,14 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+	<style>
+		div.divCss{
+			text-align:right;
+			background-color: darkgray;
+			padding-right: 20px;
+		}
+
+	</style>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -51,10 +59,13 @@
       <a class="nav-link" href="/project/board/board.me">게시판</a>
     </li>
   </ul>
-  
+ 
   <c:if test="${not empty sessionScope.userid}">
+   <div align="right">
   	<span class="navbar-text">
   	(<a href="view.jsp">${sessionScope.userid}</a> 님 반갑습니다.)
   	</span>
+  	</div>
   </c:if>
+  
 </nav>
