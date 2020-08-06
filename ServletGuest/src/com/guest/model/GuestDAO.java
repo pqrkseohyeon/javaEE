@@ -28,17 +28,69 @@ private static GuestDAO instance = new GuestDAO();
 		return ds.getConnection();	
 	}
 	
+	//로그인 체크
+	public int guestLoginCheck(String userid, String pwd) {
+		Connection con = null;
+		Statement st = null;
+		ResultSet rs = null;
+		int flag=-1;//회원아님(-1)회원(1)비번오류(0)
+		
+		try {
+			con=getConnection();
+			String sql="select pwd from member where userid='"+userid+"'";
+			st=con.createStatement();
+			rs=st.executeQuery(sql);
+			if(rs.next()) {//회원임
+				if(rs.getString("pwd").equals(pwd)) {//회원맞음
+					flag=1;//회원
+				}else {
+					flag=0;//회원은 맞는데 비번오류
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeConnection(con, st,rs);
+		}
+		
+		return flag;
+	}
+	
+	//삭제
+	public void guestDelete(int num) {
+		Connection con = null;
+		Statement st = null;
+		
+		try {
+			con = getConnection();
+			String sql ="delete from guestbook where num="+num;
+			st=con.createStatement();
+			st.executeUpdate(sql);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeConnection(con, st,null);
+		}
+	}
+	
 	//회원수
-	public int guestCount() {
+	public int guestCount(String field, String word) {
 		Connection con = null;
 		Statement st = null;
 		ResultSet rs = null;
 		int count=0;
+		String sql="";
 		
 		try {
 			con=getConnection();
-			String sql="select count(*) from guestbook";
 			st=con.createStatement();
+			
+			if(word.equals("")) {
+				sql="select count(*) from guestbook";
+			}else {
+				sql="select count(*) from guestbook where "+field+ " like '%"+word+"%'";
+			}
+			
 			rs=st.executeQuery(sql);
 			if(rs.next()) {//한개만 있을때 while 여러개 있을때
 				count=rs.getInt(1);
@@ -73,6 +125,46 @@ private static GuestDAO instance = new GuestDAO();
 		}
 		
 	}
+	//전체보기 검색 포함 페이징
+		public ArrayList<GuestDTO>guestList(String field, String word, int startRow, int endRow){
+			Connection con = null;
+			PreparedStatement ps = null;
+			ResultSet rs = null;
+			
+			ArrayList<GuestDTO> arr = new ArrayList<>();
+			
+			try {
+				con=getConnection();	
+						
+				StringBuilder sb = new StringBuilder();
+				sb.append("select*from");
+				sb.append(" (select aa.*,rownum rn from");
+				sb.append(" (select*from guestbook where "+field+" like'%"+word+"%'");
+				sb.append(" order by num desc)aa");
+				sb.append(" where rownum<=?) where rn>=?");
+				
+				
+				ps=con.prepareStatement(sb.toString());
+				ps.setInt(1, endRow);
+				ps.setInt(2, startRow);
+				rs=ps.executeQuery();
+				while(rs.next()) {
+					GuestDTO gu = new GuestDTO();
+					gu.setNum(rs.getInt("num"));
+					gu.setName(rs.getString("name"));
+					gu.setContent(rs.getString("content"));
+					gu.setGrade(rs.getString("grade"));
+					gu.setCreated(rs.getString("created"));
+					gu.setIpaddr(rs.getString("ipaddr"));
+					arr.add(gu);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}finally {
+				closeConnection(con, ps,rs);
+			}
+			return arr;				
+		}
 	//전체보기 페이징
 	public ArrayList<GuestDTO>guestList(int startRow, int endRow){
 		Connection con = null;
@@ -144,25 +236,25 @@ private static GuestDAO instance = new GuestDAO();
 				
 	}
 	//상세보기
-	public GuestDTO guestView(String name) {
+	public GuestDTO guestView(int num) {
 		Connection con = null;
 		Statement st = null;
 		ResultSet rs = null;
-		GuestDTO dto = null;
+		GuestDTO guest = null;
 		
 		try {
 			con=getConnection();
-			String sql ="select*from guestbook where name='"+name+"'";
+			String sql ="select*from guestbook where num="+num;
 			st=con.createStatement();
 			rs=st.executeQuery(sql);
 			if(rs.next()) {
-				dto = new GuestDTO();
-				dto.setNum(rs.getInt("num"));
-				dto.setName(rs.getString("name"));
-				dto.setContent(rs.getString("content"));
-				dto.setGrade(rs.getString("grade"));
-				dto.setCreated(rs.getString("created"));
-				dto.setIpaddr(rs.getString("ipaddr"));
+				guest = new GuestDTO();
+				guest.setNum(rs.getInt("num"));
+				guest.setName(rs.getString("name"));
+				guest.setContent(rs.getString("content"));
+				guest.setGrade(rs.getString("grade"));
+				guest.setCreated(rs.getString("created"));
+				guest.setIpaddr(rs.getString("ipaddr"));
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -170,7 +262,7 @@ private static GuestDAO instance = new GuestDAO();
 		}finally {
 			closeConnection(con, st,rs);
 		}
-		return dto;
+		return guest;
 	}
 	
 	

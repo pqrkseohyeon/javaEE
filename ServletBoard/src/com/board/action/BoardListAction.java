@@ -1,4 +1,4 @@
-package com.guest.action;
+package com.board.action;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,21 +10,23 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.guest.model.GuestDAO;
-import com.guest.model.GuestDTO;
-import com.guest.model.PageUtil;
+import com.board.model.BoardDAOImpl;
+import com.board.model.BoardDTO;
+import com.board.model.PageUtil;
+
+
 
 /**
- * Servlet implementation class GuestListAction
+ * Servlet implementation class BoardListAction
  */
-@WebServlet("/guestbook/list.gb")
-public class GuestListAction extends HttpServlet {
+@WebServlet("/board/list")
+public class BoardListAction extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GuestListAction() {
+    public BoardListAction() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,7 +36,7 @@ public class GuestListAction extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
-		GuestDAO dao = GuestDAO.getInstance();
+		BoardDAOImpl dao = BoardDAOImpl.getInstance();
 		String pageNum=request.getParameter("pageNum")==null?"1":request.getParameter("pageNum");
 		String field = request.getParameter("field")==null?"":request.getParameter("field");
 		String word = request.getParameter("word")==null?"":request.getParameter("word");
@@ -46,7 +48,7 @@ public class GuestListAction extends HttpServlet {
 		
 		
 		
-		int count=dao.guestCount(field,word);
+		int count=dao.boardCount(field,word);
 		//총페이지수
 		int totPage =(count/pageSize)+(count%pageSize==0?0:1);
 		int pageBlock=3;
@@ -65,21 +67,21 @@ public class GuestListAction extends HttpServlet {
 		pu.setField(field);
 		pu.setWord(word);
 		
-		ArrayList<GuestDTO> arr = null;
+		ArrayList<BoardDTO>arr = null;
 		if(word.equals("")) {
-			arr=dao.guestList(startRow,endRow);
+			arr=dao.boardList(startRow,endRow);
 		}else {
-			arr=dao.guestList(field, word, startRow, endRow);
+			arr=dao.boardList(field, word, startRow, endRow);
 		}
 		
 		int rowNo = count-((currentPage-1)*pageSize);//매 페이지의 시작번호
 		
 		request.setAttribute("rowNo", rowNo);
 		request.setAttribute("pu", pu);//페이지 저장
-		request.setAttribute("guestbook", arr);
+		request.setAttribute("board", arr);
 		request.setAttribute("count", count);
 		
-		RequestDispatcher rd = request.getRequestDispatcher("listResult.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("list.jsp");
 		rd.forward(request, response);
 	}
 

@@ -3,6 +3,7 @@ package com.guest.action;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -10,22 +11,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.simple.JSONObject;
-
 import com.guest.model.GuestDAO;
-import com.guest.model.GuestDTO;
 
 /**
- * Servlet implementation class GuestViewAction
+ * Servlet implementation class GuestLoginCheck
  */
-@WebServlet("/guestbook/view.gb")
-public class GuestViewAction extends HttpServlet {
+@WebServlet("/guestbook/login.gb")
+public class GuestLoginAction extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GuestViewAction() {
+    public GuestLoginAction() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -34,21 +32,6 @@ public class GuestViewAction extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		int num = Integer.parseInt(request.getParameter("num"));
-		GuestDAO dao = GuestDAO.getInstance();
-		GuestDTO guest= dao.guestView(num);
-		//자바  Object -> JSON
-		JSONObject obj = new JSONObject();
-		obj.put("name", guest.getName());//(jsp에서 출력할 값 ,)
-		obj.put("content", guest.getContent());
-		obj.put("grade", guest.getGrade());
-		obj.put("ipaddr", guest.getIpaddr());
-		obj.put("num", guest.getNum());
-		obj.put("created", guest.getCreated());
-		response.setContentType("text/html;charset=utf-8");
-		PrintWriter out = response.getWriter();
-		out.println(obj.toString());
 		
 	}
 
@@ -56,8 +39,26 @@ public class GuestViewAction extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
+		request.setCharacterEncoding("utf-8");
+		String userid=request.getParameter("userid");
+		String pwd=request.getParameter("pwd");
+		GuestDAO dao = GuestDAO.getInstance();
+		int flag = dao.guestLoginCheck(userid,pwd);//member 테이블 사용
+		String path="";
+		if(flag==1) {//회원
+			HttpSession session = request.getSession();
+			session.setAttribute("login", userid);//userid를 login이라는 이름으로 넣는다.
+			path="insert.jsp";
+		}else if(flag==0) {//비번오류
+			request.setAttribute("errMsg", "비밀번호를 확인하세요");
+			path="login.jsp";
+		}else if(flag==-1) {//회원아님
+			request.setAttribute("errMsg", "회원이 아닙니다.");
+			path="login.jsp";
+		}
+		RequestDispatcher rd = request.getRequestDispatcher(path);
+		rd.forward(request, response);
+		
 	}
 
 }

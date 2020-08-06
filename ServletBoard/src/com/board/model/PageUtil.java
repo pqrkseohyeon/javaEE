@@ -1,4 +1,6 @@
-package com.guest.model;
+package com.board.model;
+
+
 
 public class PageUtil {
 	private int currentPage;

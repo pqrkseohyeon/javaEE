@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,9 +9,17 @@
  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
  <script>
  $(document).ready(function(){
-	 getData(1);
+	 getData(1,"","");//페이지 로드시 전체리스트 보여주기
 	 
-	 $("#send").click(function(){
+	 $("#btnSearch").on("click",function(){//검색버튼 클릭
+		 getData(1,$("#field").val(),$("#word").val());
+	 })
+	 
+	 $("#send").click(function(){//전송버튼 클릭
+		 if(${sessionScope.login==null}){
+			 alert("로그인을 하세요");
+			 
+		 }
 		 var name = $("#name").val();
 		 var content = $("#content").val();
 		 var grade = $("input:radio[name=grade]:checked").val();
@@ -31,9 +40,11 @@
 		 });//ajax
 	 })//send
  })//document
- function getData(pageNum){
+ 
+ //전체 내용보는 함수
+ function getData(pageNum,field,word){
 	 $.get("list.gb",
-			 {"pageNum":pageNum},
+			 {"pageNum":pageNum,"field":field,"word":word},
 			 function(d){
 		 		$("#result").html(d);
 	 })
@@ -64,10 +75,48 @@
  	 }
 	 $("#"+target).text(len);
  }
+ //상세보기
+ function fview(num){
+	 $.getJSON("view.gb",{"num":num},function(d){
+		var htmlStr="";
+		htmlStr+="<table>";
+		htmlStr+="<tr>";
+		htmlStr+="<td>이름</td>";
+		htmlStr+="<td>"+d.name+"</td>";
+		htmlStr+="</tr>";
+		htmlStr+="<tr>";
+		htmlStr+="<td>내용</td>";
+		htmlStr+="<td>"+d.content+"</td>";
+		htmlStr+="</tr>";
+		htmlStr+="<tr>";
+		htmlStr+="<td>작성일</td>";
+		htmlStr+="<td>"+d.created+"</td>";
+		htmlStr+="</tr>";
+		htmlStr+="</table>";
+		$("#view").html(htmlStr);
+	 });
+ }
+ //삭제하기
+ function fdelete(num, name){
+	 if(confirm("["+name+"]의 게시물을 삭제할까요?")){
+		 $.get("delete.gb?num="+num,function(d){
+			 $("#result").html(d);
+		 })
+	 }	 
+ }
  </script>
 
 </head>
 <body>
+<c:if test="${sessionScope.login==null }">
+<a href="login.jsp">로그인</a>
+</c:if>
+
+<c:if test="${sessionScope.login!=null}">
+	${login}님 반갑습니다.
+	<a href="logout.gb">로그아웃</a>
+</c:if>
+<br/><br/>
 <form method="post" action="create.gb">
 <table  align="center" width=900px>
 <tr>
@@ -103,10 +152,23 @@
 </tr>
 </table>
 </form>
+<br/><br/>
+<div align="right">
+<form name="search" id="search">
+	<select name="field" id="field">
+		<option value="name">이름</option>
+		<option value="content">내용</option>
+	</select>
+	<input type="text" name="word" id="word">
+	<input type="button" value="찾기" id="btnSearch">
+</form>
+</div>
 <br/><br/><br/>
+
 <div id="result" align="center"></div>
 <hr>
 <div id="view">
+
 </div>
 
 
