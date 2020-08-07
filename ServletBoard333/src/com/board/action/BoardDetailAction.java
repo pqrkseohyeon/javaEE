@@ -14,43 +14,39 @@ import com.board.model.BoardDAOImpl;
 import com.board.model.BoardDTO;
 
 /**
- * Servlet implementation class BoardInsertAction
+ * Servlet implementation class BoardDetailAction
  */
-@WebServlet("/board/insert")
-public class BoardInsertAction extends HttpServlet {
+@WebServlet("/board/detail")
+public class BoardDetailAction extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public BoardInsertAction() {
-
+    public BoardDetailAction() {
+        super();
+        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("insert.jsp");
-		rd.forward(request,response);
+		request.setCharacterEncoding("utf-8");
+		int num = Integer.parseInt(request.getParameter("num"));
+		BoardDAO dao = BoardDAOImpl.getInstance();
+		BoardDTO board = dao.boardfindById(num);
+		request.setAttribute("board", board);
+		RequestDispatcher rd = request.getRequestDispatcher("detail.jsp");
+		rd.forward(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("utf-8");
-		
-		BoardDTO board = new BoardDTO();
-		board.setWriter(request.getParameter("writer"));
-		board.setSubject(request.getParameter("subject"));
-		board.setContent(request.getParameter("content"));
-		
-		BoardDAO dao = BoardDAOImpl.getInstance();
-		dao.boardSave(board);
-		response.sendRedirect("list.jsp");
-		
-		
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

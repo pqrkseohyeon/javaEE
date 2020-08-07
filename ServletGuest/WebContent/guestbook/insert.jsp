@@ -39,7 +39,7 @@
 			 }
 		 });//ajax
 	 })//send
- })//document
+ });//document
  
  //전체 내용보는 함수
  function getData(pageNum,field,word){

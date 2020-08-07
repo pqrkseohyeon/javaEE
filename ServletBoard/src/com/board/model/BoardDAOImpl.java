@@ -31,7 +31,30 @@ private static BoardDAOImpl instance = new BoardDAOImpl();
 		return ds.getConnection();	
 	}
 	
-	//회원수
+	//회원수-검색x
+	public int boardCount() {
+		Connection con = null;
+		Statement st = null;
+		ResultSet rs = null;
+		int count=0;
+		
+		try {
+			con=getConnection();
+			st=con.createStatement();
+			String sql="select count(*) from tbl_board";
+			rs=st.executeQuery(sql);
+			if(rs.next()) {
+				count = rs.getInt(1);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeConnection(con, st,rs);
+		}
+		return count;
+	}
+	
+	//회원수-검색포함
 	public int boardCount(String field, String word) {
 		Connection con = null;
 		Statement st = null;
@@ -61,6 +84,9 @@ private static BoardDAOImpl instance = new BoardDAOImpl();
 		return count;
 	}
 	
+
+	
+	
 	//추가
 	@Override
 	public void boardSave(BoardDTO board) {
@@ -86,36 +112,36 @@ private static BoardDAOImpl instance = new BoardDAOImpl();
 		
 	}
 
-	//회원전체보기
-	@Override
-	public ArrayList<BoardDTO> boardList() {
+
+	//전체보기 검색
+	public ArrayList<BoardDTO> boardSearch(String field, String word){
 		Connection con = null;
 		Statement st = null;
 		ResultSet rs = null;
-		ArrayList<BoardDTO> arr = new ArrayList<>();
+		ArrayList<BoardDTO>arr = new ArrayList<>();
 		
 		try {
 			con=getConnection();
-			String sql="select*from tbl_board";
+			String sql="select*from tbl_board where "+field+" like'%"+word+"%'";
+			
 			st=con.createStatement();
 			rs=st.executeQuery(sql);
 			while(rs.next()) {
-				BoardDTO bo = new BoardDTO();
-				bo.setNum(rs.getInt("num"));
-				bo.setWriter(rs.getString("writer"));
-				bo.setContent(rs.getString("content"));
-				bo.setSubject(rs.getString("subject"));
-				bo.setReg_date(rs.getString("reg_date"));
-				bo.setReadcount(rs.getInt("readcount"));
-				arr.add(bo);
+				BoardDTO dto = new BoardDTO();
+				dto.setWriter(rs.getString("writer"));
+				dto.setSubject(rs.getString("subject"));
+				dto.setContent(rs.getString("content"));
+				dto.setReg_date(rs.getString("reg_date"));
 			}
 		} catch (Exception e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
-			closeConnection(con, st, rs);
+			closeConnection(con, st,rs);
 		}
 		return arr;
 	}
+	
 	//전체보기  페이징
 		public ArrayList<BoardDTO>boardList(int startRow, int endRow){
 			Connection con = null;
@@ -173,6 +199,7 @@ private static BoardDAOImpl instance = new BoardDAOImpl();
 			sb.append(" (select*from tbl_board where "+field+" like'%"+word+"%'");
 			sb.append(" order by num desc)aa");
 			sb.append(" where rownum<=?) where rn>=?");
+			
 			
 			
 			ps=con.prepareStatement(sb.toString());
