@@ -1,28 +1,29 @@
 package com.member.action;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.member.model.MemberDTO;
 import com.member.model.SMemberDAOImpl;
 
 /**
- * Servlet implementation class MemberInsert
+ * Servlet implementation class MemberIdCheck
  */
-@WebServlet("/member/insert.me")
-public class MemberInsert extends HttpServlet {
+@WebServlet("/member/idcheck.me")
+public class MemberIdCheck extends HttpServlet implements Servlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MemberInsert() {
+    public MemberIdCheck() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,7 +32,7 @@ public class MemberInsert extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		RequestDispatcher rd = request.getRequestDispatcher("join.jsp");
+		RequestDispatcher rd = request.getRequestDispatcher("idCheck.jsp");
 		rd.forward(request, response);
 	}
 
@@ -40,18 +41,12 @@ public class MemberInsert extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
-		
+		String userid = request.getParameter("userid");
 		SMemberDAOImpl dao = SMemberDAOImpl.getInstance();
-		MemberDTO member = new MemberDTO();
-		member.setAdmin(Integer.parseInt(request.getParameter("admin")));
-		member.setEmail(request.getParameter("email"));
-		member.setName(request.getParameter("name"));
-		member.setPhone(request.getParameter("phone"));
-		member.setPwd(request.getParameter("pwd"));
-		member.setUserid(request.getParameter("userid"));
-		
-		dao.memberInsert(member);
-		response.sendRedirect("login.me");
+		String flag=dao.idCheck(userid);
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.print(flag);
 	}
 
 }

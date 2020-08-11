@@ -43,15 +43,20 @@ public class MemberInsert extends HttpServlet {
 		
 		SMemberDAOImpl dao = SMemberDAOImpl.getInstance();
 		MemberDTO member = new MemberDTO();
-		member.setAdmin(Integer.parseInt(request.getParameter("admin")));
+		
 		member.setEmail(request.getParameter("email"));
 		member.setName(request.getParameter("name"));
 		member.setPhone(request.getParameter("phone"));
 		member.setPwd(request.getParameter("pwd"));
 		member.setUserid(request.getParameter("userid"));
+		member.setAddr(request.getParameter("addr"));
+		member.setDetailAddr(request.getParameter("detailAddr"));
+		member.setExtraAddr(request.getParameter("extraAddr"));
+		
 		
 		dao.memberInsert(member);
-		response.sendRedirect("login.me");
+		//response.sendRedirect("login.me");
+
 	}
 
 }
