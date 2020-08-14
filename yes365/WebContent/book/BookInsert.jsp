@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@include file="../include/header.jsp" %>
 <%@include file="../include/sidebar.jsp" %>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <head>
 
   <meta charset="utf-8">
@@ -28,7 +29,7 @@
          <div class="row">
       <div class="col-lg-8 mb-4">
       
-        <form name="sentMessage" id="contactForm" novalidate method="post" action="upload.do" enctype="multipart/form-data">
+        <form name="sentMessage" id="frm" novalidate method="post" action="BookInsert" enctype="multipart/form-data">
           <div class="control-group form-group">
             <div class="controls">
               <label>책제목:</label>
@@ -39,7 +40,7 @@
           <div class="control-group form-group">
             <div class="controls">
               <label>저자명:</label>
-              <input type="text" class="form-control" id="Author" name="Author" required data-validation-required-message="Please enter your phone number.">
+              <input type="text" class="form-control" id="author" name="author" required data-validation-required-message="Please enter your phone number.">
             </div>
           </div>
           <div class="control-group form-group">
@@ -60,11 +61,12 @@
               <input type="text" class="form-control" id="price" name="price" required data-validation-required-message="Please enter your email address.">
             </div>
           </div>
+          <div id="image-holder"></div>
            <div class="control-group form-group">
             <div class="controls">
               <label>책 이미지:</label><br/>
-				<input type="file" name="uploadFile"><br/>
-				<input type="submit" value="전송" >
+				<input type="file" name="uploadFile" name="uploadFile"><br/>
+			
             </div>
           </div>
           <div class="control-group form-group">
@@ -75,7 +77,8 @@
           </div>
           <div id="success"></div>
           <!-- For success/fail messages -->
-          <button type="submit" class="btn btn-primary" id="sendMessageButton">책 업로드</button>
+          <button id ="send"  class="btn btn-primary">책 업로드</button>
+          <button type="reset" class="btn btn-primary">취소</button>
         </form>
       </div>
         
@@ -83,13 +86,66 @@
       </div>
     </div>
    
-    </div>
-    <!-- /.row -->
 
-  </div>
-  <!-- /.container -->
 
  
 </body>
+
 <%@include file="../include/footer.jsp" %>
-</html>
+<<script>
+$(document).ready(function(){
+	$("#send").click(function(){
+		if($("#title").val()==""){
+			alert("도서명을 입력하세요");
+			$("#title").focus();
+			return false;
+		}
+		if($("#author").val()==""){
+			alert("저자명을 입력하세요");
+			$("#author").focus();
+			return false;
+		}
+		if($("#publisher").val()==""){
+			alert("출판사를 입력하세요");
+			$("#publisher").focus();
+			return false;
+		}
+		if($("#p_date").val()==""){
+			alert("출판일을 입력하세요");
+			$("#publisher").focus();
+			return false;
+		}
+		if($("#price").val()==""){
+			alert("도서 가격을 입력하세요");
+			$("#price").focus();
+			return false;			
+		}
+		if($("#info").val()==""){
+			alert("도서 정보를 입력하세요");
+			$("#price").focus();
+			return false;
+		}
+		$("#frm").submit();
+	})//send
+	
+	$("#uploadFile").on('change', function () {
+        if (typeof (FileReader) != "undefined") {
+            var image_holder = $("#image-holder");
+            image_holder.empty();
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $("<img />", {
+                    "src": e.target.result,
+                    "class": "thumb-image"
+                }).appendTo(image_holder);
+            }
+            image_holder.show();
+            reader.readAsDataURL($(this)[0].files[0]);
+        } else {
+            alert("이 브라우저에서 지원하지 않는 확장자 입니다.");
+        }
+    });	
+	
+	
+});//document
+</script>

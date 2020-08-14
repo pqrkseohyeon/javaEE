@@ -38,6 +38,8 @@ public class MemberUpdate extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
+		
+		HttpSession session = request.getSession();
 		MemberDTO dto = new MemberDTO();
 		
 		dto.setName(request.getParameter("name"));
@@ -47,10 +49,10 @@ public class MemberUpdate extends HttpServlet {
 		dto.setAddr(request.getParameter("addr"));
 		dto.setDetailAddr(request.getParameter("detailAddr"));
 		dto.setExtraAddr(request.getParameter("extraAddr"));
-		
+		dto.setUserid((String)session.getAttribute("userid"));
 		SMemberDAOImpl dao = SMemberDAOImpl.getInstance();
 		dao.memberUpdate(dto);
-		HttpSession session = request.getSession();
+		
 		session.invalidate();
 		response.sendRedirect("login.me");
 		

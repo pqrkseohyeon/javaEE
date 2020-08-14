@@ -7,7 +7,7 @@ public class BookDTO {
 	private String publisher;
 	private String p_date;
 	private int price;
-	private String img;
+	private String uploadFile;
 	private String info;
 	
 	public int getNum() {
@@ -17,25 +17,25 @@ public class BookDTO {
 		this.num = num;
 	}
 	public String getTitle() {
-		return title;
+		return title == null ? "" : title.trim();
 	}
 	public void setTitle(String title) {
 		this.title = title;
 	}
 	public String getAuthor() {
-		return author;
+		return author == null ? "" : author.trim();
 	}
 	public void setAuthor(String author) {
 		this.author = author;
 	}
 	public String getPublisher() {
-		return publisher;
+		return publisher == null ? "" : publisher.trim();
 	}
 	public void setPublisher(String publisher) {
 		this.publisher = publisher;
 	}
 	public String getP_date() {
-		return p_date;
+		return p_date == null ? "" : p_date.trim();
 	}
 	public void setP_date(String p_date) {
 		this.p_date = p_date;
@@ -46,18 +46,20 @@ public class BookDTO {
 	public void setPrice(int price) {
 		this.price = price;
 	}
-	public String getImg() {
-		return img;
+	public String getUploadFile() {
+		return uploadFile == null ? "" : uploadFile.trim();
 	}
-	public void setImg(String img) {
-		this.img = img;
+	public void setUploadFile(String uploadFile) {
+		this.uploadFile = uploadFile;
 	}
 	public String getInfo() {
-		return info;
+		return info == null ? "" : info.trim();
 	}
 	public void setInfo(String info) {
 		this.info = info;
 	}
+	
+
 	
 	
 }

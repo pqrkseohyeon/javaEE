@@ -37,11 +37,11 @@
         <div class="list-group">
           <a href="/yes365/BookMain.jsp" class="list-group-item">Home</a>
           <a href="/yes365/book/BookInsert.jsp" class="list-group-item">도서등록</a>
-          <a href="/yes365/book/BookList.jsp" class="list-group-item">도서목록</a>
-          <a href="#" class="list-group-item">회원관리</a>
-          <a href="#" class="list-group-item">..관리</a>
-          <a href="#" class="list-group-item">..관리</a>
-          <a href="#" class="list-group-item">..관리</a>
+          <a href="/yes365/book/BookListResult.jsp" class="list-group-item">도서목록</a>
+          <a href="#" class="list-group-item">회원목록</a>
+          <a href="#" class="list-group-item">..</a>
+          <a href="#" class="list-group-item">..</a>
+          <a href="#" class="list-group-item">..</a>
           
 
         </div>

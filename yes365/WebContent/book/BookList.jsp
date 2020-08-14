@@ -1,53 +1,43 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@include file="../include/header.jsp" %>
-<%@include file="../include/sidebar.jsp" %>
-<head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+  $(document).ready(function(){
+		getData(1,"","");
+		
+		$("#btnSearch").on("click",function(){//검색버튼 클릭
+			alert("Dd")
+			getData(1,$("#field").val(),$("#word").val());
+		})
+		
+	})//document
+	function getData(pageNum, field, word){
+		$.get("list",
+			  {"pageNum":pageNum, "field":field, "word":word}, 
+			  function(d){
+				 
+			    $("#result").html(d);
+		})
+	}
+  </script>
+  
+<title>도서목록</title>
 </head>
 <body>
-
-<div class="container">
-  <h2>도서목록</h2>
-  <p>book list</p>            
-  <table class="table table-striped">
-    <thead>
-      <tr>
-        <th></th>
-        <th></th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+<a href="BookInsert.jsp">도서등록</a>
+<div id="result"></div>
+	<br/></br>
+	<div align="center">
+		<form name="search" id="search">
+			<select name="field" id="field">
+				<option value="title">제목</option>
+				<option value="author">작가</option>
+			</select>
+			<input type="text" name="word" id="word">
+			<input type="button" value="검색" id="btnSearch"> 
+		</form>
+	</div>
 
 </body>
 </html>
-
-
-
-
-<%@include file="../include/footer.jsp" %>

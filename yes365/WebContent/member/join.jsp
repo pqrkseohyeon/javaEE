@@ -21,7 +21,7 @@
  
   <div class="title">
   <br/><br/>
-  <!--<img alt="logo" src="../img/join.png"  width="500" height="300">  -->
+  <img alt="logo" src="/yes365/img/yes365.PNG"  width="300" height="200"> 
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
       	 <h2>회원가입</h2>  
@@ -87,6 +87,8 @@
 
 <br>
     <button id="send" class="btn btn-primary">join</button>
+
+    </body>
   </form>
 </div>
 

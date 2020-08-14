@@ -29,8 +29,8 @@
   </footer>
 
   <!-- Bootstrap core JavaScript -->
-  <script src="/yes24/vendor/jquery/jquery.min.js"></script>
-  <script src="/yes24/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="/yes365/vendor/jquery/jquery.min.js"></script>
+  <script src="/yes365/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
 </body>
 

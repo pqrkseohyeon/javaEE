@@ -92,7 +92,7 @@
 					</div>
 				</form>
 
-				
+				<!-- <div class="login100-more" style="background-image: url('/yes365/img/yes365.PNG');"> -->
 		</div>
 	</div>
 	</div>
