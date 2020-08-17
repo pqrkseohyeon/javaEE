@@ -7,8 +7,30 @@
   <!-- Custom styles for this template -->
   <link href="/yes365/css/modern-business.css" rel="stylesheet">
   </head>
-<%@include file="../include/sidebar.jsp" %>
-<body>
 
- 
-</body>
+
+  <div class="container">
+
+    <!-- Page Heading/Breadcrumbs -->
+    <h1 class="mt-4 mb-3">관리자
+      <small>관리자 페이지</small>
+    </h1>
+
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a href="/yes365/BookMain.jsp">Home</a>
+      </li>
+      <li class="breadcrumb-item active">관리자</li>
+      <li class="breadcrumb-item active">
+      <a href="/yes365/book/BookInsert.jsp">도서등록</a>
+      </li>
+      <li class="breadcrumb-item active">
+      <a href="/yes365/book/BookList.jsp">도서목록</a>
+      </li>
+    </ol>
+
+  
+
+
+<div class="container" id="userInfo">
+<br/>

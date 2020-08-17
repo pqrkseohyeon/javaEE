@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@include file="../include/header.jsp" %>
-<%@include file="../include/sidebar.jsp" %>
+<%@include file="../include/adminView.jsp" %>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <head>
 
@@ -17,18 +17,29 @@
 
   <!-- Custom styles for this template -->
   <link href="css/modern-business.css" rel="stylesheet">
+<style>
+.insert{
+display:table;
 
+background-color: #f0f8ff;
+}
+.control-group form-group{
+display:table-cell;
+
+vertical-align:middle;
+}
+</style>
 </head>
 
 <body>
-
+	
     <!-- Contact Form -->
     <!-- In order to set the email address and subject line for the contact form go to the bin/contact_me.php file. -->
      <div class="col-lg-9 mb-4">
         <h2>도서등록</h2>
          <div class="row">
       <div class="col-lg-8 mb-4">
-      
+      <div class="insert">
         <form name="sentMessage" id="frm" novalidate method="post" action="BookInsert" enctype="multipart/form-data">
           <div class="control-group form-group">
             <div class="controls">
@@ -77,22 +88,22 @@
           </div>
           <div id="success"></div>
           <!-- For success/fail messages -->
-          <button id ="send"  class="btn btn-primary">책 업로드</button>
-          <button type="reset" class="btn btn-primary">취소</button>
+          <button id ="send"  class="btn btn-outline-secondary">책 업로드</button>
+          <button type="reset" class="btn btn-outline-danger">취소</button>
         </form>
       </div>
         
        
       </div>
     </div>
-   
+   </div>
 
 
- 
+ <%@include file="../include/footer.jsp" %>
 </body>
+</html>
 
-<%@include file="../include/footer.jsp" %>
-<<script>
+<script>
 $(document).ready(function(){
 	$("#send").click(function(){
 		if($("#title").val()==""){
@@ -125,6 +136,7 @@ $(document).ready(function(){
 			$("#price").focus();
 			return false;
 		}
+		alert("도서가 등록되었습니다. 도서 목록으로 이동합니다.");
 		$("#frm").submit();
 	})//send
 	

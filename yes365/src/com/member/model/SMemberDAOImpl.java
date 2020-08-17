@@ -36,17 +36,18 @@ public class SMemberDAOImpl implements MemberDAO{
 		
 		try {
 			con=getConnection();
-			String sql ="insert into book_member values(?,?,?,?,?,?,?,?,0)";
+			String sql ="insert into book_member(num, userid,name,pwd,email,phone,zipcode,addr,detailaddr,extraaddr,admin) "
+					+ "values(book_member_seq.nextval,?,?,?,?,?,?,?,?,?,0)";
 			ps=con.prepareStatement(sql);
 			ps.setString(1, vo.getUserid());
 			ps.setString(2, vo.getName());
 			ps.setString(3, vo.getPwd());
 			ps.setString(4, vo.getEmail());
 			ps.setString(5, vo.getPhone());
-			ps.setString(6, vo.getAddr());
-			ps.setString(7, vo.getDetailAddr());
-			ps.setString(8, vo.getExtraAddr());
-			
+			ps.setInt(6, vo.getZipcode());
+			ps.setString(7, vo.getAddr());
+			ps.setString(8, vo.getDetailAddr());
+			ps.setString(9, vo.getExtraAddr());	
 			ps.executeUpdate();		
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -137,6 +138,7 @@ public class SMemberDAOImpl implements MemberDAO{
 				dto.setPhone(rs.getString("phone"));
 				dto.setPwd(rs.getString("pwd"));
 				dto.setUserid(rs.getString("userid"));
+				dto.setZipcode(rs.getInt("zipcode"));
 				dto.setAddr(rs.getString("addr"));
 				dto.setDetailAddr(rs.getString("detailAddr"));
 				dto.setExtraAddr(rs.getString("extraAddr"));

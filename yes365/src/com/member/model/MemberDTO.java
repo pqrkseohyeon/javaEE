@@ -1,16 +1,30 @@
 package com.member.model;
 
 public class MemberDTO {
+	private int num;
 	private String userid;
 	private String name;
 	private String pwd;
 	private String email;
 	private String phone;
+	private int zipcode;
 	private String addr;
 	private String detailAddr;
 	private String extraAddr;
 	private int admin;
 	
+	public int getZipcode() {
+		return zipcode;
+	}
+	public int getNum() {
+		return num;
+	}
+	public void setNum(int num) {
+		this.num = num;
+	}
+	public void setZipcode(int zipcode) {
+		this.zipcode = zipcode;
+	}
 	public String getDetailAddr() {
 		return detailAddr == null ? "" : detailAddr.trim();
 	}

@@ -1,55 +1,58 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@include file="../include/header.jsp" %>
-<%@include file="../include/sidebar.jsp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
 <head>
-  <title>Bootstrap Example</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title> admin 도서목록</title>
+  <title>도서목록</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style>
+table {
+  border-spacing: 10px;
+  border-collapse: separate;
+}
+table td {
+  width: 30px;
+ 
+}
+</style>
 </head>
-<body>
 
 <div class="container">
-  <h2>도서목록<span id="cntSpan">${count}</span></h2><br/><br/>
-  <p>book list</p>            
-  <table class="table table-striped">
+<br/>
+<h5><a href="BookList.jsp">도서목록(<span id="cntSpan">${count}</span>)</a></h5>
+<div class="back2">
+<table class="table table-striped">
     <thead>
       <tr>
-        <th>책번호</th>
-        <th>제목</th>
-        <th>저자</th>
-        <th>출판사</th>
-        <th>출판일</th>
-        <th>가격</th>
+      	<th>책번호</th>
         <th>책커버</th>
-        <th>책정보</th>
-        <c:if test="${login!=null}">
-        	<th>삭제</th>
-        </c:if>
+        <th>제목</th>
+        <th>저자명</th>
+         
+         <th>출판일</th>
+         
+        
       </tr>
     </thead>
     <tbody>
     	<c:forEach items="${book}" var="book" varStatus="st">
       <tr>
         <td>${rowNo-st.index}</td>
-        <td>${book.num}</td>
-        <td><a href="detail?num=${bopk.num}">${book.title}</a></td>
+       	<td width="30%">     	
+      	<img src="/yes365/upload/${book.uploadFile}" width="30%">
+      	</td>
+        <td><a href="BookDetail?num=${book.num}">${book.title}</a></td>
         <td>${book.author}</td>
-        <td>${book.publisher}</td>
         <td>${book.p_date}</td>
-        <td>${book.price}</td>
-        <td>${book.uploadFile}</td>
-        <td>${book.info}</td>
-        <c:if test="${sessionScope.login!=null}">
-        	<td>
-        		<a href="javascript:fdelete(${bo.num},${bo.title})">삭제</a>
-        	</td>
-        </c:if>
+      
       </tr>
       </c:forEach>
     </tbody>
@@ -74,7 +77,3 @@
 
 </body>
 </html>
-
-
-
-<%@include file="../include/footer.jsp"%>

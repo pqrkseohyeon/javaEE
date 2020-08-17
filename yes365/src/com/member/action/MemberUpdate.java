@@ -1,6 +1,8 @@
 package com.member.action;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -50,10 +52,12 @@ public class MemberUpdate extends HttpServlet {
 		dto.setDetailAddr(request.getParameter("detailAddr"));
 		dto.setExtraAddr(request.getParameter("extraAddr"));
 		dto.setUserid((String)session.getAttribute("userid"));
+		
 		SMemberDAOImpl dao = SMemberDAOImpl.getInstance();
 		dao.memberUpdate(dto);
 		
 		session.invalidate();
+
 		response.sendRedirect("login.me");
 		
 	}

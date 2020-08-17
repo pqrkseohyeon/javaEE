@@ -36,7 +36,7 @@ public class BookImple {
 
 		try {
 			con = getConnection();
-			String sql = "insert into book(num,title,author,publisher,p_date,price,uploadfile,info) values(book_seq.nextval,?,?,?,?,?,?,?)";
+			String sql = "insert into book(num,title,author,publisher,p_date,price,uploadFile,info) values(book_seq.nextval,?,?,?,?,?,?,?)";
 			ps = con.prepareStatement(sql);
 
 			ps.setString(1, vo.getTitle());
@@ -54,6 +54,39 @@ public class BookImple {
 			closeConnection(con, ps);
 		}
 		return flag;
+	}
+	//도서목록 클릭시 전체보기
+	public ArrayList<BookDTO> bookList(){
+		Connection con=null;
+		Statement st=null;
+		ResultSet rs=null;
+		ArrayList<BookDTO> arr =new ArrayList<BookDTO>();
+		
+		try {
+			con=getConnection();
+			String sql="select * from book";
+			st=con.createStatement();
+			rs=st.executeQuery(sql);
+			while(rs.next()) {
+				BookDTO dto = new BookDTO();
+				dto.setNum(rs.getInt("num"));
+				dto.setTitle(rs.getString("title"));
+				dto.setAuthor(rs.getString("author"));
+				dto.setPublisher(rs.getString("publisher"));
+				dto.setP_date(rs.getString("p_date"));
+				dto.setPrice(rs.getInt("price"));
+				dto.setUploadFile(rs.getString("uploadFile"));
+				dto.setInfo(rs.getString("info"));
+				arr.add(dto);
+				
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			closeConnection(con, st,rs);
+		}
+		return arr;
 	}
 
 	  
@@ -136,7 +169,7 @@ public class BookImple {
 	}
 	
 	//책 갯수 출력
-	public int bookCount(String field, String word) {
+	public int getCount(String field, String word) {
 		Connection con = null;
 		Statement st = null;
 		ResultSet rs = null;
@@ -165,7 +198,7 @@ public class BookImple {
 		
 	}
 	
-	//강의 상세보기
+	//책 상세보기
 	public BookDTO bookView(int num) {
 		Connection con = null;
 		Statement st = null;
@@ -206,7 +239,7 @@ public class BookImple {
 		
 		try {
 			con=getConnection();
-			String sql="update book set title=?,author=?,publisher=?,p_date=?,price=?,uploadFile=?,info=?";
+			String sql="update book set title=?,author=?,publisher=?,p_date=?,price=?,uploadFile=?,info=? where num=?";
 			ps=con.prepareStatement(sql);
 			ps.setString(1, vo.getTitle());
 			ps.setString(2, vo.getAuthor());
@@ -215,6 +248,8 @@ public class BookImple {
 			ps.setInt(5, vo.getPrice());
 			ps.setString(6, vo.getUploadFile());
 			ps.setString(7, vo.getInfo());
+			ps.setInt(8, vo.getNum());
+			flag=ps.executeUpdate();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -223,7 +258,23 @@ public class BookImple {
 		}
 		return flag;
 	}
+	
 	//삭제
+	public void bookDelete(int num) {
+		Connection con = null;
+		Statement st = null;
+		
+		try {
+			con=getConnection();
+			String sql="delete from book where num='"+num+"'";
+			st=con.createStatement();
+			st.executeUpdate(sql);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeConnection(con, st,null);
+		}
+	}
 	
 	
 	

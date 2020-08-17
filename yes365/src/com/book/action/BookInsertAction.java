@@ -61,7 +61,7 @@ public class BookInsertAction extends HttpServlet {
 		
 		//업로드된 파일이름 구하기
 		String fileName = multi.getFilesystemName("uploadFile");
-		System.out.println("fileName : " + fileName);
+	
 		
 		if(fileName==null) { //파일 업로드 안됨
 			System.out.println("파일 업로드 되지 않았음");
@@ -81,11 +81,12 @@ public class BookInsertAction extends HttpServlet {
 			PrintWriter out = response.getWriter();
 			out.println("<script>");
 			out.println("alert('도서가 등록되었습니다');");
-			out.println("history.back(-1);");
+			//out.println("history.back(-1);");
 			out.println("</script>");
 		}
 		
-		
+		RequestDispatcher rd=request.getRequestDispatcher("BookList.jsp");
+		rd.forward(request, response);
 		
 	}
 

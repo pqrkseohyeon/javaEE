@@ -29,7 +29,16 @@
 <!--===============================================================================================-->
 
 </head>
-<body style="background-color: #666666;">
+<style>
+.login100-more{
+background-image:url("/yes365/img/lo.png");
+background-size:30%;
+background-repeat: no-repeat;
+color: white;
+
+}
+</style>
+<body style="background-color: white;">
 	<div  align="center"> 
 	<div class="limiter" >
 		<div class="container-login100">
@@ -92,7 +101,7 @@
 					</div>
 				</form>
 
-				<!-- <div class="login100-more" style="background-image: url('/yes365/img/yes365.PNG');"> -->
+				<div class="login100-more">
 		</div>
 	</div>
 	</div>
@@ -118,7 +127,7 @@ $("#loginBtn").click(function(){
 			//alert(value.trim())
 		switch(value.trim()){
 		case "0" : alert("Welcome to yes365"); location.href="/yes365/BookMain.jsp"; break;
-		case "1" : alert("관리자 로그인"); location.href="/yes365/member/adminView.jsp"; break;
+		case "1" : alert("관리자 로그인"); location.href="/yes365/BookMain.jsp"; break;
 		case "2" : alert("비밀번호 오류"); break;
 		case "-1": alert("회원이 아닙니다. 회원가입을 해주세요."); location.href="/yes365/member/insert.me"; break;
 		default: alert(value.trim());

@@ -23,7 +23,9 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="/project/js/member.js"></script>
+<style>
 
+</style>
 </head>
 
 <body>
@@ -32,7 +34,7 @@
 	<nav
 		class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="/yes365/BookMain.jsp">yes 365</a>
+			<a class="navbar-brand" href="/yes365/BookMain.jsp" >yes 365</a>
 			<button class="navbar-toggler navbar-toggler-right" type="button"
 				data-toggle="collapse" data-target="#navbarResponsive"
 				aria-controls="navbarResponsive" aria-expanded="false"
@@ -43,7 +45,7 @@
 			<div class="collapse navbar-collapse" id="navbarResponsive">
 				<ul class="navbar-nav ml-auto">
 					<a class="nav-link" href="/yes365/BookMain.jsp">홈</a>
-					<a class="nav-link" href="#">도서목록</a>
+					<a class="nav-link" href="/yes365/book/BookCardList.jsp">도서목록</a>
 
 					<c:choose>
 						<c:when test="${empty sessionScope.userid}">

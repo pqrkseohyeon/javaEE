@@ -49,6 +49,7 @@ public class MemberInsert extends HttpServlet {
 		member.setPhone(request.getParameter("phone"));
 		member.setPwd(request.getParameter("pwd"));
 		member.setUserid(request.getParameter("userid"));
+		member.setZipcode(Integer.parseInt(request.getParameter("sample6_postcode")));
 		member.setAddr(request.getParameter("addr"));
 		member.setDetailAddr(request.getParameter("detailAddr"));
 		member.setExtraAddr(request.getParameter("extraAddr"));
