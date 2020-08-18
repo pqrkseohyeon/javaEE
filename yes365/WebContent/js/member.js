@@ -63,6 +63,7 @@ $(document).ready(function(){
 		window.open("idcheck.me","","width=800 height=500")
 	});
 	
+	
 	//아이디 중복확인버튼 중복확인
 	$("#useBtn").click(function(){
 		if($("#userid").val()==""){

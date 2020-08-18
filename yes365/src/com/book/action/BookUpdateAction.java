@@ -44,7 +44,7 @@ public class BookUpdateAction extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("utf-8");
-		HttpSession session = request.getSession();
+		
 		
 		
 		int uploadFileSizeLimit=5*1024*1024;
@@ -80,8 +80,7 @@ public class BookUpdateAction extends HttpServlet {
 		
 		BookImple dao = BookImple.getInstance();
 		dao.bookUpdate(book);
-		
-		session.invalidate();
+
 
 		response.sendRedirect("BookList.jsp");
 		/*

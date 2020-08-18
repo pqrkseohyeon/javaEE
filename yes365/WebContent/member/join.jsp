@@ -21,7 +21,7 @@
  
   <div class="title">
   <br/><br/>
-  <img alt="logo" src="/yes365/img/yes365.PNG"  width="300" height="200"> 
+ <!--  <img alt="logo" src="/yes365/img/yes365.PNG"  width="300" height="200">  -->
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
       	 <h2>회원가입</h2>  

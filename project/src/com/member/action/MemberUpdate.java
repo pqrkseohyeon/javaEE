@@ -46,6 +46,7 @@ public class MemberUpdate extends HttpServlet {
 		dto.setPwd(request.getParameter("pwd"));
 		dto.setUserid(request.getParameter("userid"));
 		
+		
 		SMemberDAOImpl dao = SMemberDAOImpl.getInstance();
 		dao.memberUpdate(dto);
 		HttpSession session = request.getSession();

@@ -34,7 +34,7 @@
 background-image:url("/yes365/img/lo.png");
 background-size:30%;
 background-repeat: no-repeat;
-color: white;
+
 
 }
 </style>
@@ -90,7 +90,7 @@ color: white;
 						</span>
 					</div>
 
-					<div class="login100-form-social flex-c-m">
+					<!-- <div class="login100-form-social flex-c-m">
 						<a href="#" class="login100-form-social-item flex-c-m bg1 m-r-5">
 							<i class="fa fa-facebook-f" aria-hidden="true"></i>
 						</a>
@@ -98,7 +98,7 @@ color: white;
 						<a href="#" class="login100-form-social-item flex-c-m bg2 m-r-5">
 							<i class="fa fa-twitter" aria-hidden="true"></i>
 						</a>
-					</div>
+					</div> -->
 				</form>
 
 				<div class="login100-more">

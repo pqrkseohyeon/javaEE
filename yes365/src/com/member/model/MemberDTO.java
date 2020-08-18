@@ -7,6 +7,7 @@ public class MemberDTO {
 	private String pwd;
 	private String email;
 	private String phone;
+	
 	private int zipcode;
 	private String addr;
 	private String detailAddr;

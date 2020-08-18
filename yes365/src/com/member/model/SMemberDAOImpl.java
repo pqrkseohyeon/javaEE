@@ -77,6 +77,7 @@ public class SMemberDAOImpl implements MemberDAO{
 				dto.setName(rs.getString("name"));
 				dto.setPhone(rs.getString("phone"));
 				dto.setAddr(rs.getString("addr"));
+				dto.setZipcode(rs.getInt("zipcode"));
 				dto.setDetailAddr(rs.getString("detailAddr"));
 				dto.setExtraAddr(rs.getString("extraAddr"));
 				arr.add(dto);
@@ -99,15 +100,16 @@ public class SMemberDAOImpl implements MemberDAO{
 		
 		try {
 			con=getConnection();
-			String sql="update book_member set name=?,email=?,phone=?,addr=?,detailAddr=?,extraAddr=? where userid=?";
+			String sql="update book_member set name=?,email=?,phone=?,zipcode=?,addr=?,detailAddr=?,extraAddr=? where userid=?";
 			ps = con.prepareStatement(sql);
 			ps.setString(1, vo.getName());
 			ps.setString(2, vo.getEmail());
 			ps.setString(3, vo.getPhone());
-			ps.setString(4, vo.getAddr());
-			ps.setString(5, vo.getDetailAddr());
-			ps.setString(6, vo.getExtraAddr());
-			ps.setString(7, vo.getUserid());
+			ps.setInt(4, vo.getZipcode());
+			ps.setString(5, vo.getAddr());
+			ps.setString(6, vo.getDetailAddr());
+			ps.setString(7, vo.getExtraAddr());
+			ps.setString(8, vo.getUserid());
 			flag=ps.executeUpdate();
 			
 		} catch (Exception e) {

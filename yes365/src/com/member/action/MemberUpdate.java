@@ -49,6 +49,7 @@ public class MemberUpdate extends HttpServlet {
 		
 		dto.setPhone(request.getParameter("phone"));
 		dto.setAddr(request.getParameter("addr"));
+		dto.setZipcode(Integer.parseInt(request.getParameter("zipcode")));
 		dto.setDetailAddr(request.getParameter("detailAddr"));
 		dto.setExtraAddr(request.getParameter("extraAddr"));
 		dto.setUserid((String)session.getAttribute("userid"));
